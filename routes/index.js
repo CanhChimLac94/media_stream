@@ -59,8 +59,9 @@ router.post('/media/getLinkVideo', (req, res, next) => {
     return res.json({
         channel
     });
-
 });
+
+router.post('/media/youtube/getAudioSource', Youtube.getAudioSource)
 
 module.exports = {
     routers: [

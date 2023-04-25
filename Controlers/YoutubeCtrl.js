@@ -26,6 +26,25 @@ async function index(req, res, next) {
   }
 }
 
+async function getAudioSource(req, res, next){
+  let url = req.body.urlVideo || "";
+  try {
+    const info = await ytdl.getInfo(url);
+    const item = info.formats.find(item =>
+          item.hasAudio === true && item.container === 'webm'
+        );
+    return res.json({
+      ...item,
+      audioPath: item.url
+    });
+  } catch (err) {
+    return res.json({
+      msg: 'error',
+      err
+    })
+  }
+}
+
 module.exports = {
-  index
+  index, getAudioSource
 }
