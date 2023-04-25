@@ -1,9 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const MPlaylist = require('../Models/Playlist');
-
-// import youtobeData from '../datas/youtube_data.json';
-const youtobeData = require('../datas/youtube_data.json');
+const MMedia = require('../Models/Media');
+// const youtobeData = require('../datas/youtube_data.json');
 const domain = 'https://trandung.ddns.net';
 
 function root_path(pathName) {
@@ -93,48 +92,15 @@ async function video(req, res) {
 }
 
 async function playlist(req, res) {
-  // const resData = [];
-  // youtobeData.playlists.forEach((pl) => {
-  //   const p = new MPlaylist({
-  //     id: pl.id,
-  //     name: pl.title,
-  //     thumb: pl.thumbnail,
-  //     total: pl.total_videos,
-  //   });
-  //   resData.push(p)
-  //   p.save()
-  // })
   const resData = await MPlaylist.find();
   return res.json(resData);
 }
 
-// playlist();
-
 async function playlistItems(req, res) {
   const data = req.body;
   const { playlistId } = data;
-  const resYItems = [];
-  let rawYItems = [];
-
-  youtobeData.playlists.forEach((pl) => {
-    if (pl.id === playlistId) {
-      rawYItems = pl.videos;
-    }
-  });
-  rawYItems = rawYItems || [];
-  rawYItems.sort((f, r) => {
-    return f.position - r.position;
-  });
-  rawYItems.forEach((yv) => {
-    yv.title = yv.title.replace('|', '-');
-    resYItems.push({
-      id: yv.id,
-      source: `${domain}/media/video/${yv.title}.mp3`,
-      name: yv.title,
-      thumb: yv.thumbnail,
-      artist: '',
-      youtubeSource: `https://www.youtube.com/watch?v=${yv.id}` 
-    });
+  const resYItems = await MMedia.find({
+    playlistId
   });
   return res.json(resYItems);
 }
@@ -143,6 +109,40 @@ async function test(req, res) {
   const fileName = 'tesst';
   return res.json({ fileName });
 }
+
+function insertPlaylist(){
+  MPlaylist.deleteMany({}, () => {});
+  youtobeData.playlists.forEach(yv => {
+    const p = new MPlaylist({
+      id: yv.id,
+      name: yv.title,
+      thumb: yv.thumbnail,
+      total: yv.total_videos,
+    });
+    p.save();
+  });
+}
+
+function insertMedia(){
+  MMedia.deleteMany({}, () => {});
+  youtobeData.playlists.forEach(p => {
+    p.videos.forEach(yv => {
+      const m = new MMedia({
+        id: yv.id,
+        source: `/media/video/${yv.title}.mp3`,
+        name: yv.title,
+        thumb: yv.thumbnail,
+        artist: '',
+        youtubeSource: `https://www.youtube.com/watch?v=${yv.id}`,
+        playlistId: p.id
+      });
+      m.save();
+    });
+  });
+}
+
+// insertMedia();
+// insertPlaylist();
 
 module.exports = {
   index,

@@ -1,15 +1,21 @@
-// earnings
-var connection = "data_media";
-var Entity = {
+const db = require("../database/mongo");
+
+const connection = "media";
+const Entity = {
+    id: String,
+    source: String,
     name: String,
-    link: String,
-    createAt: Date,
-    description: String,
+    thumb: String,
+    artist: String,
+    youtubeSource: String,
+    playlistId: String,
+    channel: {
+      type: String,
+      default: 'youtube'
+    }
 };
 
-module.exports = function(db) {
-    var mongoose = db.mongoose;
-    var Schema = db.Schema;
-    var model = mongoose.model(connection, new Schema(Entity));
-    return model;
-};
+module.exports = db.mongoose.model(
+  connection,
+  new db.Schema(Entity)
+);
