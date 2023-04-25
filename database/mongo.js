@@ -1,14 +1,20 @@
-var mongoose = require('mongoose');
+if (global.mongoDb) {
+    return module.exports = global.mongoDb;
+} else {
+    const mongoose = require('mongoose');
+    const mongoDB = "mongodb+srv://tranvandungmelinh:2gvbeOwCyH6uQ92L@trandung.arnrv5l.mongodb.net/mediaStream?retryWrites=true&w=majority";
+    // var mongoDB = 'mongodb://127.0.0.1/mediaStreaming';
 
-var mongoDB = 'mongodb://127.0.0.1/mediaStreaming';
-mongoose.connect(mongoDB, {});
-mongoose.Promise = global.Promise;
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    mongoose.connect(mongoDB, { useUrlParser: true, useUnifiedTopology: true });
+    mongoose.Promise = global.Promise;
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-var Schema = mongoose.Schema;
-var data = {
-    mongoose: mongoose,
-    Schema: Schema
-};
-module.exports = data;
+    const Schema = mongoose.Schema;
+    const data = {
+        mongoose: mongoose,
+        Schema: Schema
+    };
+    global.mongoDb = data;
+    module.exports = data;
+}

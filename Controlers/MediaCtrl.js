@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const MPlaylist = require('../Models/Playlist');
 
 // import youtobeData from '../datas/youtube_data.json';
 const youtobeData = require('../datas/youtube_data.json');
@@ -92,18 +93,22 @@ async function video(req, res) {
 }
 
 async function playlist(req, res) {
-  const resData = [];
-  youtobeData.playlists.forEach((pl) => {
-    resData.push({
-      id: pl.id,
-      name: pl.title,
-      thumb: pl.thumbnail,
-      total: pl.total_videos
-    })
-  })
-  // return res.json({ p: youtobeData.playlists });
+  // const resData = [];
+  // youtobeData.playlists.forEach((pl) => {
+  //   const p = new MPlaylist({
+  //     id: pl.id,
+  //     name: pl.title,
+  //     thumb: pl.thumbnail,
+  //     total: pl.total_videos,
+  //   });
+  //   resData.push(p)
+  //   p.save()
+  // })
+  const resData = await MPlaylist.find();
   return res.json(resData);
 }
+
+// playlist();
 
 async function playlistItems(req, res) {
   const data = req.body;
@@ -127,7 +132,8 @@ async function playlistItems(req, res) {
       source: `${domain}/media/video/${yv.title}.mp3`,
       name: yv.title,
       thumb: yv.thumbnail,
-      artist: ''
+      artist: '',
+      youtubeSource: `https://www.youtube.com/watch?v=${yv.id}` 
     });
   });
   return res.json(resYItems);
@@ -137,7 +143,6 @@ async function test(req, res) {
   const fileName = 'tesst';
   return res.json({ fileName });
 }
-
 
 module.exports = {
   index,
