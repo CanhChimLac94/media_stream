@@ -24,6 +24,9 @@ router.get('/video/:f?', MediaCtrl.video);
 router.post('/playlist/', MediaCtrl.playlist);
 router.post('/playlist/items', MediaCtrl.playlistItems);
 
+router.post('/playlist/save', MediaCtrl.savePlaylistInfo);
+router.post('/playlist/update', MediaCtrl.updatePlaylist);
+
 //=======================
 
 module.exports = router;
