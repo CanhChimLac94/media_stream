@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const MPlaylist = require('../Models/Playlist');
 const MMedia = require('../Models/Media');
+const ggService = require('../service/googleService.js');
+
 // const youtobeData = require('../datas/youtube_data.json');
 const domain = 'https://trandung.ddns.net';
 
@@ -105,6 +107,43 @@ async function playlistItems(req, res) {
   return res.json(resYItems);
 }
 
+async function savePlaylistInfo(req, res){
+  const playlistId = req.body.id;
+  const p = await ggService.getPlaylistInfo(playlistId);
+  if(!p){
+    return res.json({
+      status: 'fail',
+      msg: "playlist is not exist!"
+    });
+  }
+  const mp = new MPlaylist(p);
+  mp.save();
+  return res.json({
+    status: 'success',
+    msg: 'created playlist',
+    data: {
+      ...p
+    }
+  })
+}
+
+async function updatePlaylist(req, res){
+  const PlaylistId = req.body.id;
+  const p = await ggService.getPlaylistInfo(playlistId);
+  if(!p){
+    return res.json({
+      status: 'fail',
+      msg: "playlist is not exist!"
+    });
+  }
+  const pOld = MPlaylist.findOneAndUpdate({id: playlistId}, p);
+  
+  return res.json({
+    status: "success",
+    msg: "update success"
+  });
+}
+
 async function test(req, res) {
   const fileName = 'tesst';
   return res.json({ fileName });
@@ -143,12 +182,15 @@ function insertMedia(){
 
 // insertMedia();
 // insertPlaylist();
+// getPlaylistInfo();
 
 module.exports = {
   index,
   video,
   playlist,
   playlistItems,
-
+  savePlaylistInfo,
+  updatePlaylist,
+  
   test,
 }
