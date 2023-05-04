@@ -5,9 +5,11 @@ const router = express.Router();
 // const usersRouter = require('./users');
 // const apiRouter = require('./api');
 const mediaRouter = require('./media');
+const tiktokRouter = require('./tiktok');
+
 const appCtrl = require('../Controlers/AppCtrl');
-const Youtube = require("../Controlers/YoutubeCtrl");
-const TikTok = require("../Controlers/TikTokCtrl");
+const VideoDownload = require("../Controlers/SolicalDownloadVideoCtrl");
+
 
 /**
  * Trace function can log in fo to debug
@@ -45,30 +47,14 @@ router.get('/', appCtrl.index);
 // router.get('/video/:file?', appCtrl.video);
 // router.get('/media', appCtrl.index);
 
-router.get('/media/youtube', Youtube.index);
-router.get('/media/tikTok', TikTok.index);
-
-router.post('/media/getLinkVideo', (req, res, next) => {
-    const { channel } = req.body;
-    switch (channel.key.toLowerCase()) {
-        case 'tiktok':
-            return TikTok.index(req, res, next);
-        case 'youtube':
-            return Youtube.index(req, res, next);
-    }
-    return res.json({
-        channel
-    });
-});
-
-router.post('/media/youtube/getAudioSource', Youtube.getAudioSource)
+router.post('/media/getLinkVideo', VideoDownload.getVideoInfo);
 
 module.exports = {
     routers: [
         { path: '', router },
         { path: 'media', router: mediaRouter },
         { path: '/media', router: mediaRouter },
-
+        { path: '/tiktok', router: tiktokRouter },
         // { path: 'api', router: apiRouter },
         // { path: 'user', router: usersRouter },
     ]
