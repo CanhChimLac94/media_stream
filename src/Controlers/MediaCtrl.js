@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
-const MPlaylist = require('../../Models/Playlist');
-const MMedia = require('../../Models/Media');
+const MPlaylist = require('../Models/Playlist');
+const MMedia = require('../Models/Media');
 const ggService = require('../service/googleService.js');
 
 // const youtobeData = require('../datas/youtube_data.json');
