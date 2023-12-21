@@ -1,4 +1,6 @@
 const axios = require("axios");
+const tiktokService = require("./tiktokService");
+
 const headers = {
   'accept': 'application/json, text/javascript, */*; q=0.01',
   'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -10,7 +12,7 @@ const headers = {
 const ssyoutube = async (url) => {
   return axios.post("https://ssyoutube.com/api/convert", {
     url: url,
-  }, {
+  },{
     headers
   })
     .then(res => res.data)
@@ -20,5 +22,6 @@ const ssyoutube = async (url) => {
 };
 
 module.exports = {
-  ssyoutube
+  ssyoutube,
+  tiktok: tiktokService.getInfo
 }

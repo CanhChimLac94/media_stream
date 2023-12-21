@@ -8,6 +8,7 @@ const mediaRouter = require('./media');
 const tiktokRouter = require('./tiktok');
 
 const appCtrl = require('../Controlers/AppCtrl');
+const youtubeCtrl = require('../Controlers/YoutubeCtrl');
 const VideoDownload = require("../Controlers/SolicalDownloadVideoCtrl");
 
 
@@ -48,6 +49,14 @@ router.get('/', appCtrl.index);
 // router.get('/media', appCtrl.index);
 
 router.post('/media/getLinkVideo', VideoDownload.getVideoInfo);
+
+router.get('/media/getLinkVideo_v2', youtubeCtrl.index);
+
+router.get('/getip', (req, res, next) => {
+  const ipAddress = req.header('x-forwarded-for') ||
+            req.socket.remoteAddress;
+  res.send(ipAddress);
+});
 
 module.exports = {
     routers: [
