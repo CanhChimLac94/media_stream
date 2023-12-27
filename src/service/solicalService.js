@@ -10,6 +10,7 @@ const headers = {
 };
 
 const DOMAIN_TIKTOK_API = 'https://www.tikwm.com';
+const DOMAIN_API = 'https://api.com.net.ai';
 // const DOMAIN_YTB_API = 'https://ssyoutube.com/api/convert';
 // const DOMAIN_API = 'https://api.com.net.ai/wp-json/aio-dl/video-data';
 
