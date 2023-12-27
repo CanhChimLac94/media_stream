@@ -49,6 +49,7 @@ router.get('/', appCtrl.index);
 // router.get('/media', appCtrl.index);
 
 router.post('/media/getLinkVideo', VideoDownload.getVideoInfo);
+router.get('/dvideo', VideoDownload.getVideoInfo);
 
 router.get('/media/getLinkVideo_v2', youtubeCtrl.index);
 
