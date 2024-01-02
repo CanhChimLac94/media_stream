@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const gTTS = require('gtts');
 
 module.exports = {
   index,
@@ -52,3 +53,19 @@ async function video(req, res) {
     throw error;
   }
 }
+
+async function convert(...args) {
+
+  const dir = path.join(global.appRoot, 'tmp');
+  const filepath = path.join(dir, 'i-love-you.mp3');
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  // console.log('global.appRoot:', filepath);
+  const gtts = new gTTS('convert text to speed', 'en');
+  gtts.save(filepath, () => {
+    console.log("Save done in path: ", filepath);
+  });
+}
+
+convert()
